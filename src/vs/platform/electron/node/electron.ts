@@ -80,6 +80,7 @@ export interface IElectronService {
 	openDevTools(options?: OpenDevToolsOptions): Promise<void>;
 	toggleDevTools(): Promise<void>;
 	startCrashReporter(options: CrashReporterStartOptions): Promise<void>;
+	getCrashReporterId(): Promise<string>;
 
 	// Connectivity
 	resolveProxy(url: string): Promise<string | undefined>;

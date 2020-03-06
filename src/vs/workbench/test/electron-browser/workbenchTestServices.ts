@@ -207,6 +207,7 @@ export class TestElectronService implements IElectronService {
 	async openDevTools(options?: Electron.OpenDevToolsOptions | undefined): Promise<void> { }
 	async toggleDevTools(): Promise<void> { }
 	async startCrashReporter(options: Electron.CrashReporterStartOptions): Promise<void> { }
+	async getCrashReporterId(): Promise<string> { return ''; }
 	async resolveProxy(url: string): Promise<string | undefined> { return undefined; }
 }
 

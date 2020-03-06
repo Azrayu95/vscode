@@ -18,8 +18,9 @@ import { AddFirstParameterToFunctions } from 'vs/base/common/types';
 import { IDialogMainService } from 'vs/platform/dialogs/electron-main/dialogs';
 import { dirExists } from 'vs/base/node/pfs';
 import { URI } from 'vs/base/common/uri';
-import { ITelemetryData, ITelemetryService } from 'vs/platform/telemetry/common/telemetry';
+import { ITelemetryData, ITelemetryService, crashReporterIdStorageKey } from 'vs/platform/telemetry/common/telemetry';
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
+import { IStorageMainService } from 'vs/platform/storage/node/storageMainService';
 import { ILogService } from 'vs/platform/log/common/log';
 
 export interface IElectronMainService extends AddFirstParameterToFunctions<IElectronService, Promise<any> /* only methods, not events */, number | undefined /* window ID */> { }
@@ -36,7 +37,8 @@ export class ElectronMainService implements IElectronMainService {
 		@ILifecycleMainService private readonly lifecycleMainService: ILifecycleMainService,
 		@IEnvironmentService private readonly environmentService: IEnvironmentService,
 		@ITelemetryService private readonly telemetryService: ITelemetryService,
-		@ILogService private readonly logService: ILogService
+		@ILogService private readonly logService: ILogService,
+		private storageMainService: IStorageMainService
 	) {
 	}
 
@@ -395,6 +397,10 @@ export class ElectronMainService implements IElectronMainService {
 	async startCrashReporter(windowId: number | undefined, options: CrashReporterStartOptions): Promise<void> {
 		crashReporter.start(options);
 		this.logService.trace('ElectronMainService#crashReporter', JSON.stringify(options));
+	}
+
+	async getCrashReporterId(): Promise<string> {
+		return this.storageMainService.get(crashReporterIdStorageKey)!;
 	}
 
 	//#endregion

@@ -544,12 +544,13 @@ export class ElectronWindow extends Disposable {
 		const appCenterURL = isWindows ? appCenterConfig[process.arch === 'ia32' ? 'win32-ia32' : 'win32-x64']
 			: isLinux ? appCenterConfig[`linux-x64`] : appCenterConfig.darwin;
 		const info = await this.telemetryService.getTelemetryInfo();
+		const crashReporterId = await this.electronService.getCrashReporterId();
 
 		// base options with product info
 		const options: CrashReporterStartOptions = {
 			companyName,
 			productName,
-			submitURL: appCenterURL.concat('&uid=', info.machineId, '&iid=', info.instanceId),
+			submitURL: appCenterURL.concat('&uid=', crashReporterId, '&iid=', crashReporterId, '&sid=', info.sessionId),
 			extra: {
 				vscode_version: product.version,
 				vscode_commit: product.commit || ''
